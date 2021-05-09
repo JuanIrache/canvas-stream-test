@@ -1,3 +1,5 @@
+// Do the conversion from canvas to PNG in parallel in a Worker and send that to ffmpeg
+
 const path = require('path');
 
 const worker = new Worker(path.resolve(__dirname, 'worker.js'));
