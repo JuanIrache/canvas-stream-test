@@ -53,8 +53,6 @@ function setup() {
       });
 
     for (let i = 0; i <= frames; i++) {
-      if (i % 10 === 0) {
-      }
       paint({ i, percent: Math.round((100 * i) / frames) });
       const frameData = await canvasToFrame(p5Canvas.elt);
       await addFrameToStream(frameData);
