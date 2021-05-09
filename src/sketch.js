@@ -1,4 +1,5 @@
-// Import approaches ('worker' folder is the benchmark)
+// Import approaches
+const benchmarkApproach = 'worker';
 const approaches = ['basic', 'imagedata'];
 
 // Try with more frames for a solid solution
@@ -6,7 +7,6 @@ const approaches = ['basic', 'imagedata'];
 const frames = 1000;
 
 ////////////////////////// Do not edit below this line
-const benchmarkApproach = 'worker';
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
