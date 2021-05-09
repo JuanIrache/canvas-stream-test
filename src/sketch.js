@@ -5,7 +5,7 @@ const approaches = ['basic', 'imagedata'];
 // Try with more frames or complex images for a solid solution
 
 const frames = 1000;
-const complexity = 5;
+const complexity = 10;
 
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
@@ -27,7 +27,7 @@ function setup() {
       ellipse(d * width, e * height, 80, 80);
     };
     for (let j = 1; j <= complexity; j++) {
-      paintOnce(i * j);
+      paintOnce(i + j * 5);
     }
 
     fill(0);
