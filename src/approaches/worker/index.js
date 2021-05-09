@@ -24,12 +24,8 @@ module.exports = {
         resolve(Buffer.from(data.payload, 'base64'));
       };
 
-      worker.postMessage(
-        {
-          action: 'saveFrame',
-          payload: { bitmap, stream: true }
-        },
-        [bitmap]
-      );
+      worker.postMessage({ action: 'saveFrame', payload: { bitmap } }, [
+        bitmap
+      ]);
     })
 };
