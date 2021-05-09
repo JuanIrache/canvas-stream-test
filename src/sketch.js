@@ -14,7 +14,7 @@ function setup() {
   const p5Canvas = createCanvas(1920, 1080);
   noLoop();
 
-  const paint = i => {
+  const paint = ({ i, percent }) => {
     clear();
     const paintOnce = ii => {
       const a = noise(ii / 100);
@@ -27,6 +27,8 @@ function setup() {
     paintOnce(i * 2);
     paintOnce(i * 4);
     paintOnce(i * 8);
+    fill(0);
+    text(`${percent}%`, 10, 10);
   };
 
   const processVideo = async ({ canvasToFrame, ffmpegArgs }, name) => {
@@ -49,9 +51,8 @@ function setup() {
 
     for (let i = 0; i <= frames; i++) {
       if (i % 10 === 0) {
-        console.log(Math.round((100 * i) / frames) + '%');
       }
-      paint(i);
+      paint({ i, percent: Math.round((100 * i) / frames) });
       const frameData = await canvasToFrame(p5Canvas.elt);
       await addFrameToStream(frameData);
       await new Promise(setImmediate);
