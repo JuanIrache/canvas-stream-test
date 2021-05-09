@@ -7,7 +7,7 @@ const worker = new Worker(path.resolve(__dirname, 'worker.js'));
 let initialised;
 
 module.exports = {
-  ffmpegArgs: ['-f', 'image2pipe'],
+  ffmpegArgs: () => ['-f', 'image2pipe'],
   canvasToFrame: canvas =>
     new Promise(async resolve => {
       if (!initialised) {

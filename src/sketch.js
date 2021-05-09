@@ -29,7 +29,11 @@ function setup() {
     const startTime = Date.now();
     const imagesStream = new PassThrough();
 
-    executeFfmpeg({ ffmpegArgs, imagesStream, name });
+    executeFfmpeg({
+      args: ffmpegArgs(canvas.width, canvas.height),
+      imagesStream,
+      name
+    });
 
     const addFrameToStream = frameData =>
       new Promise(resolve => {

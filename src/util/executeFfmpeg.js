@@ -1,11 +1,11 @@
 const { execFile } = require('child_process');
 const path = require('path');
 
-module.exports = ({ ffmpegArgs, imagesStream, name }) => {
+module.exports = ({ args, imagesStream, name }) => {
   const child = execFile(
     path.resolve(__dirname, '../lib/ffmpeg'),
     [
-      ...ffmpegArgs,
+      ...args,
       '-i',
       '-',
       '-c:v',
