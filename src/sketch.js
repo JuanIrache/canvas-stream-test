@@ -56,7 +56,8 @@ function setup() {
       paint({ i, percent: Math.round((100 * i) / frames) });
       const frameData = await canvasToFrame(p5Canvas.elt);
       await addFrameToStream(frameData);
-      await new Promise(setImmediate);
+      // Not really doing much in this case
+      //   await new Promise(setImmediate);
     }
 
     imagesStream.end();
