@@ -2,9 +2,10 @@
 const benchmarkApproach = 'worker';
 const approaches = ['basic', 'imagedata'];
 
-// Try with more frames for a solid solution
+// Try with more frames or complex images for a solid solution
 
 const frames = 1000;
+const complexity = 5;
 
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
@@ -18,15 +19,17 @@ function setup() {
     clear();
     const paintOnce = ii => {
       const a = noise(ii / 100);
-      const b = noise(ii / 100 + 10000);
-      const c = noise(ii / 100 + 100000000);
-      fill(a * 255);
-      ellipse(b * width, c * height, 80, 80);
+      const b = noise(ii / 100 + 10);
+      const c = noise(ii / 100 + 10000);
+      const d = noise(ii / 100 + 1000000);
+      const e = noise(ii / 100 + 100000000);
+      fill(a * 255, b * 255, c * 255);
+      ellipse(d * width, e * height, 80, 80);
     };
-    paintOnce(i);
-    paintOnce(i * 2);
-    paintOnce(i * 4);
-    paintOnce(i * 8);
+    for (let j = 1; j <= complexity; j++) {
+      paintOnce(i * j);
+    }
+
     fill(0);
     text(`${percent}%`, 10, 10);
   };
