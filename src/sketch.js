@@ -1,7 +1,12 @@
-// Import approaches
-const approaches = ['worker'];
+// Import approaches ('worker' folder is the benchmark)
+const approaches = ['imagedata'];
+
+// Try with more frames for a solid solution
+
+const frames = 1000;
 
 ////////////////////////// Do not edit below this line
+const benchmarkApproach = 'worker';
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
@@ -25,7 +30,7 @@ function setup() {
   };
 
   const processVideo = async ({ canvasToFrame, ffmpegArgs }, name) => {
-    console.log('Start rendering', name);
+    console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
     const imagesStream = new PassThrough();
 
@@ -42,10 +47,9 @@ function setup() {
         else imagesStream.once('drain', resolve);
       });
 
-    const iterations = 1000;
-    for (let i = 0; i <= iterations; i++) {
-      if (i % 100 === 0) {
-        console.log(Math.round((100 * (i + 1)) / iterations) + '%');
+    for (let i = 0; i <= frames; i++) {
+      if (i % 10 === 0) {
+        console.log(Math.round((100 * i) / frames) + '%');
       }
       paint(i);
       const frameData = await canvasToFrame(p5Canvas.elt);
@@ -59,30 +63,30 @@ function setup() {
   };
 
   const runTest = async () => {
-    let benchmark;
+    const benchmark = await processVideo(
+      require(`./approaches/worker/index`),
+      'worker'
+    );
+
+    console.log(`Benchmark duration is ${Math.round(benchmark / 1000)}s`);
 
     for (const dir of approaches) {
       const approach = require(`./approaches/${dir}/index`);
       const duration = await processVideo(approach, dir);
-      if (!benchmark) {
-        benchmark = duration;
-        console.log(`Benchmark time is ${Math.round(benchmark / 1000)}s`);
-      } else if (duration * 2 < benchmark) {
+      if (duration < benchmark) {
         console.log(
-          `${dir} is much faster than the benchmark! (${Math.round(
+          `${dir} approach is faster than the benchmark! (${Math.round(
             duration / 1000
           )}s) Check if videos look the same`
         );
       } else {
         console.log(
-          `${dir} is not much faster than the benchmarkh (${Math.round(
-            duration / 1000
-          )}s)`
+          `${dir} approach is not fast enough (${Math.round(duration / 1000)}s)`
         );
       }
     }
   };
-  runTest();
+  setImmediate(runTest);
 }
 
 function draw() {}
