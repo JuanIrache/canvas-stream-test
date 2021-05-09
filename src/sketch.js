@@ -69,23 +69,29 @@ function setup() {
       benchmarkApproach
     );
 
-    console.log(`Benchmark duration is ${Math.round(benchmark / 1000)}s`);
+    const toSec = ms => Math.round(ms / 1000);
+
+    const results = { [benchmarkApproach]: benchmark };
+
+    console.log(
+      `Benchmark (${benchmarkApproach}) duration is ${toSec(benchmark)}s`
+    );
 
     for (const dir of approaches) {
       const approach = require(`./approaches/${dir}/index`);
       const duration = await processVideo(approach, dir);
       if (duration < benchmark) {
         console.log(
-          `${dir} approach is faster than the benchmark! (${Math.round(
-            duration / 1000
+          `${dir} approach is faster than the benchmark! (${toSec(
+            duration
           )}s) Check if videos look the same`
         );
       } else {
-        console.log(
-          `${dir} approach is not fast enough (${Math.round(duration / 1000)}s)`
-        );
+        console.log(`${dir} approach is not fast enough (${toSec(duration)}s)`);
       }
+      results[dir] = duration;
     }
+    console.table(results);
   };
   setImmediate(runTest);
 }
