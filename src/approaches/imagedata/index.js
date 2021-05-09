@@ -10,8 +10,8 @@ module.exports = {
     `${w}x${h}`
   ],
   canvasToFrame: canvas =>
-    canvas
-      .getContext('2d')
-      .getImageData(0, 0, canvas.width, canvas.height)
-      .data.toString()
+    Buffer.from(
+      canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height)
+        .data
+    )
 };
