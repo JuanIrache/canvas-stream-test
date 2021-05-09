@@ -74,7 +74,7 @@ function setup() {
 
     const toSec = ms => Math.round(ms / 1000);
 
-    const results = { [benchmarkApproach]: benchmark };
+    const results = [[benchmarkApproach, toSec(benchmark) + ' s', '100%']];
 
     console.log(
       `Benchmark (${benchmarkApproach}) duration is ${toSec(benchmark)}s`
@@ -92,7 +92,11 @@ function setup() {
       } else {
         console.log(`${dir} approach is not fast enough (${toSec(duration)}s)`);
       }
-      results[dir] = duration;
+      results.push([
+        dir,
+        toSec(duration) + ' s',
+        Math.round((100 * duration) / benchmark) + '%'
+      ]);
     }
     console.table(results);
   };
