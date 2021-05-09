@@ -64,8 +64,8 @@ function setup() {
 
   const runTest = async () => {
     const benchmark = await processVideo(
-      require(`./approaches/worker/index`),
-      'worker'
+      require(`./approaches/${benchmarkApproach}/index`),
+      benchmarkApproach
     );
 
     console.log(`Benchmark duration is ${Math.round(benchmark / 1000)}s`);
