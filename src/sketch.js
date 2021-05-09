@@ -1,5 +1,5 @@
 // Import approaches ('worker' folder is the benchmark)
-const approaches = ['imagedata'];
+const approaches = ['basic', 'imagedata'];
 
 // Try with more frames for a solid solution
 

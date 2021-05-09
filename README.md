@@ -5,7 +5,6 @@ Testing different approaches for sending canvas frames to ffmpeg efficiently wit
 ## To-Do
 
 - Fix imageData approach
-- Add standard non-worker toBlob approach
 
 ## Instructions
 
