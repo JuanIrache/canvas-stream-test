@@ -34,33 +34,46 @@ function setup() {
     text(`${percent}%`, 10, 10);
   };
 
-  const processVideo = async ({ canvasToFrame, ffmpegArgs }, name) => {
+  const processVideo = async (
+    { canvasToFrame, ffmpegArgs, handleAll },
+    name
+  ) => {
     console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
-    const imagesStream = new PassThrough();
 
-    executeFfmpeg({
-      args: ffmpegArgs(canvas.width, canvas.height),
-      imagesStream,
-      name
-    });
+    if (handleAll) {
+      for (let i = 0; i <= frames; i++) {
+        paint({ i, percent: Math.round((100 * i) / frames) });
+        await handleAll({ canvas, first: i === 0, last: i === frames, name });
+        // Not really doing much in this case
+        //   await new Promise(setImmediate);
+      }
+    } else {
+      const imagesStream = new PassThrough();
 
-    const addFrameToStream = frameData =>
-      new Promise(resolve => {
-        const ok = imagesStream.write(frameData, 'utf8', () => {});
-        if (ok) resolve();
-        else imagesStream.once('drain', resolve);
+      executeFfmpeg({
+        args: ffmpegArgs(canvas.width, canvas.height),
+        imagesStream,
+        name
       });
 
-    for (let i = 0; i <= frames; i++) {
-      paint({ i, percent: Math.round((100 * i) / frames) });
-      const frameData = await canvasToFrame(p5Canvas.elt);
-      await addFrameToStream(frameData);
-      // Not really doing much in this case
-      //   await new Promise(setImmediate);
-    }
+      const addFrameToStream = frameData =>
+        new Promise(resolve => {
+          const ok = imagesStream.write(frameData, 'utf8', () => {});
+          if (ok) resolve();
+          else imagesStream.once('drain', resolve);
+        });
 
-    imagesStream.end();
+      for (let i = 0; i <= frames; i++) {
+        paint({ i, percent: Math.round((100 * i) / frames) });
+        const frameData = await canvasToFrame(p5Canvas.elt);
+        await addFrameToStream(frameData);
+        // Not really doing much in this case
+        //   await new Promise(setImmediate);
+      }
+
+      imagesStream.end();
+    }
     const duration = Date.now() - startTime;
     return duration;
   };
