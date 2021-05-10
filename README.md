@@ -16,3 +16,7 @@ Testing different approaches for sending canvas frames to ffmpeg efficiently wit
 - The render time must be significantly smaller
 - The video result must be the same, compare them in the expo
 - Try with different amounts of frames frames
+
+## Conclusions
+
+- using imageData as opposed to converting the canvas to PNG and using ffmpeg in a worker provide the best results. PNG approaches perform a bit better if the background is reset in every frame (fewer painted pixels are converted to PNG), but still don't match imageData approaches
