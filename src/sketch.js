@@ -1,6 +1,6 @@
 // Import approaches
 const benchmarkApproach = 'worker';
-const approaches = ['basic', 'imagedata'];
+const approaches = ['basic', 'imagedata', 'imagedataworker'];
 
 // Try with more frames or complex images for a solid solution
 

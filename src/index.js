@@ -14,6 +14,7 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
       contextIsolation: false,
       backgroundThrottling: false,
       enableRemoteModule: true
