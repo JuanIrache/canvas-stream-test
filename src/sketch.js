@@ -6,6 +6,7 @@ const approaches = ['basic', 'imagedata', 'imagedataworker'];
 
 const frames = 1000;
 const complexity = 10;
+const clearBackground = false;
 
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
@@ -16,28 +17,37 @@ function setup() {
   noLoop();
 
   const paint = ({ i, percent }) => {
-    clear();
+    if (clearBackground) clear();
     const paintOnce = ii => {
       const a = noise(ii / 100);
       const b = noise(ii / 100 + 10);
       const c = noise(ii / 100 + 10000);
       const d = noise(ii / 100 + 1000000);
       const e = noise(ii / 100 + 100000000);
+      const f = noise(ii / 100 + 1000000000);
+      const g = noise(ii / 100 + 1000000000);
       fill(a * 255, b * 255, c * 255);
-      ellipse(d * width, e * height, 80, 80);
+      stroke(0, f * 100);
+      ellipse(d * width, e * height, 80 * g, 80 * g);
     };
-    for (let j = 1; j <= complexity; j++) {
-      paintOnce(i + j * 5);
+
+    for (let j = 0; j < complexity; j++) {
+      noiseSeed(j);
+      paintOnce(i);
     }
 
+    noStroke();
+    fill(255);
+    rect(0, 0, 30, 12);
     fill(0);
-    text(`${percent}%`, 10, 10);
+    text(`${percent}%`, 0, 10);
   };
 
   const processVideo = async (
     { canvasToFrame, ffmpegArgs, handleAll },
     name
   ) => {
+    clear();
     console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
 
