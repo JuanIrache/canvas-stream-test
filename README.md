@@ -13,9 +13,8 @@ Testing different approaches for sending canvas frames to ffmpeg efficiently wit
 - Add new approaches to the approaches array, by folder name, in sketch.js
 - run npm install and npm start (see progress percent for each approach on top left corner)
 - Watch results in console
-- The render time must be significantly smaller
-- The video result must be the same, compare them in the expo
-- Try with different amounts of frames frames
+- Compare the video results in the exports folder
+- Try with different amounts of frames, complexity and clearing the background
 
 ## Conclusions
 
