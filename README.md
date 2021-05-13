@@ -19,4 +19,9 @@ Testing different approaches for sending canvas frames to ffmpeg efficiently wit
 ## Conclusions
 
 - Using imageData as opposed to converting the canvas to PNG and using ffmpeg in a worker provide the best results. PNG approaches perform a bit better if the background is reset in every frame (fewer painted pixels are converted to PNG), but still don't match imageData approaches
+- Using webgl and reading the data with readpixels also seems to provide an edge, but this might not be viable in some use cases
 - Real world applications where multiple inputs are overlayed and the program is doing intensive work in addition to the encoding do not seem consistent with these results. There, the "worker" approach seems to be faster in most cases
+
+## Note
+
+- Place webgl approaches at the end, otherwise the P5js canvas breaks somehow

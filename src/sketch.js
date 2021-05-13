@@ -1,6 +1,6 @@
 // Import approaches
 const benchmarkApproach = 'worker';
-const approaches = ['basic', 'imagedata', 'imagedataworker'];
+const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
 
 // Try with more frames or complex images for a solid solution
 
@@ -12,12 +12,19 @@ const clearBackground = false;
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
+let font;
+
+function preload() {
+  font = loadFont('util/font.ttf');
+}
+
 function setup() {
-  const p5Canvas = createCanvas(1920, 1080);
+  let p5Canvas = createCanvas(1920, 1080);
   noLoop();
 
   const paint = ({ i, percent }) => {
     if (clearBackground) clear();
+
     const paintOnce = ii => {
       const a = noise(ii / 100);
       const b = noise(ii / 100 + 10);
@@ -44,9 +51,16 @@ function setup() {
   };
 
   const processVideo = async (
-    { canvasToFrame, ffmpegArgs, handleAll },
+    { canvasToFrame, ffmpegArgs, handleAll, webgl },
     name
   ) => {
+    p5Canvas.remove();
+    p5Canvas = createCanvas(1920, 1080, webgl ? WEBGL : P2D);
+    push();
+    if (webgl) {
+      textFont(font);
+      translate(-width / 2, -height / 2);
+    }
     clear();
     console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
@@ -84,6 +98,7 @@ function setup() {
 
       imagesStream.end();
     }
+    pop();
     const duration = Date.now() - startTime;
     return duration;
   };
