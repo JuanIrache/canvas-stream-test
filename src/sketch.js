@@ -4,7 +4,7 @@ const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
 
 // Try with more frames or complex images for a solid solution
 
-const frames = 1000;
+const frames = 100;
 const complexity = 10;
 const clearBackground = false;
 
@@ -12,18 +12,12 @@ const clearBackground = false;
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
-let font;
-
-function preload() {
-  font = loadFont('util/font.ttf');
-}
-
 function setup() {
-  let p5Canvas = createCanvas(1920, 1080);
+  const p5Canvas = createCanvas(1920, 1080);
   noLoop();
 
-  const paint = ({ i, percent }) => {
-    if (clearBackground) clear();
+  const paint = ({ i, percent, graph }) => {
+    if (clearBackground) g.clear();
 
     const paintOnce = ii => {
       const a = noise(ii / 100);
@@ -33,9 +27,9 @@ function setup() {
       const e = noise(ii / 100 + 100000000);
       const f = noise(ii / 100 + 1000000000);
       const g = noise(ii / 100 + 1000000000);
-      fill(a * 255, b * 255, c * 255);
-      stroke(0, f * 100);
-      ellipse(d * width, e * height, 80 * g, 80 * g);
+      graph.fill(a * 255, b * 255, c * 255);
+      graph.stroke(0, f * 100);
+      graph.ellipse(d * width, e * height, 80 * g, 80 * g);
     };
 
     for (let j = 0; j < complexity; j++) {
@@ -43,6 +37,7 @@ function setup() {
       paintOnce(i);
     }
 
+    image(graph, 0, 0);
     noStroke();
     fill(255);
     rect(0, 0, 30, 12);
@@ -54,21 +49,22 @@ function setup() {
     { canvasToFrame, ffmpegArgs, handleAll, webgl },
     name
   ) => {
-    p5Canvas.remove();
-    p5Canvas = createCanvas(1920, 1080, webgl ? WEBGL : P2D);
-    push();
-    if (webgl) {
-      textFont(font);
-      translate(-width / 2, -height / 2);
-    }
+    const graph = createGraphics(1920, 1080, webgl ? WEBGL : P2D);
+    if (webgl) graph.translate(-width / 2, -height / 2);
+
     clear();
     console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
 
     if (handleAll) {
       for (let i = 0; i <= frames; i++) {
-        paint({ i, percent: Math.round((100 * i) / frames) });
-        await handleAll({ canvas, first: i === 0, last: i === frames, name });
+        paint({ i, percent: Math.round((100 * i) / frames), graph });
+        await handleAll({
+          canvas: graph.elt,
+          first: i === 0,
+          last: i === frames,
+          name
+        });
         // Not really doing much in this case
         //   await new Promise(setImmediate);
       }
@@ -89,7 +85,7 @@ function setup() {
         });
 
       for (let i = 0; i <= frames; i++) {
-        paint({ i, percent: Math.round((100 * i) / frames) });
+        paint({ i, percent: Math.round((100 * i) / frames), graph });
         const frameData = await canvasToFrame(p5Canvas.elt);
         await addFrameToStream(frameData);
         // Not really doing much in this case
@@ -98,7 +94,6 @@ function setup() {
 
       imagesStream.end();
     }
-    pop();
     const duration = Date.now() - startTime;
     return duration;
   };
