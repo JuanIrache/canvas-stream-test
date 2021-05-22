@@ -4,7 +4,7 @@ const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
 
 // Try with more frames or complex images for a solid solution
 
-const frames = 100;
+const frames = 1000;
 const complexity = 10;
 const clearBackground = false;
 
