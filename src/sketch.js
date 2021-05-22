@@ -69,8 +69,6 @@ function setup() {
       for (let i = 0; i <= frames; i++) {
         paint({ i, percent: Math.round((100 * i) / frames) });
         await handleAll({ canvas, first: i === 0, last: i === frames, name });
-        // Not really doing much in this case
-        //   await new Promise(setImmediate);
       }
     } else {
       const imagesStream = new PassThrough();
@@ -92,8 +90,6 @@ function setup() {
         paint({ i, percent: Math.round((100 * i) / frames) });
         const frameData = await canvasToFrame(p5Canvas.elt);
         await addFrameToStream(frameData);
-        // Not really doing much in this case
-        //   await new Promise(setImmediate);
       }
 
       imagesStream.end();
