@@ -9,7 +9,7 @@ const complexity = 10;
 const clearBackground = false;
 const frameWidth = 1920;
 const frameHeight = 1080;
-const visualize = true;
+const visualize = true; // View the frames as they render
 
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
