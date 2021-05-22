@@ -37,7 +37,6 @@ function setup() {
       paintOnce(i);
     }
 
-    image(graph, 0, 0);
     noStroke();
     fill(255);
     rect(0, 0, 30, 12);
