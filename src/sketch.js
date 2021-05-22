@@ -4,7 +4,7 @@ const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
 
 // Try with more frames or complex images for a solid solution
 
-const frames = 1000;
+const frames = 100;
 const complexity = 10;
 const clearBackground = false;
 
@@ -13,7 +13,7 @@ const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
 function setup() {
-  const p5Canvas = createCanvas(1920, 1080);
+  createCanvas(1920, 1080);
   noLoop();
 
   const paint = ({ i, percent, graph }) => {
@@ -64,14 +64,12 @@ function setup() {
           last: i === frames,
           name
         });
-        // Not really doing much in this case
-        //   await new Promise(setImmediate);
       }
     } else {
       const imagesStream = new PassThrough();
 
       executeFfmpeg({
-        args: ffmpegArgs(canvas.width, canvas.height),
+        args: ffmpegArgs(graph.width, graph.height),
         imagesStream,
         name
       });
@@ -85,10 +83,8 @@ function setup() {
 
       for (let i = 0; i <= frames; i++) {
         paint({ i, percent: Math.round((100 * i) / frames), graph });
-        const frameData = await canvasToFrame(p5Canvas.elt);
+        const frameData = await canvasToFrame(graph.elt);
         await addFrameToStream(frameData);
-        // Not really doing much in this case
-        //   await new Promise(setImmediate);
       }
 
       imagesStream.end();
