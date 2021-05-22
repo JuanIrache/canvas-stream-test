@@ -7,13 +7,17 @@ const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
 const frames = 1000;
 const complexity = 10;
 const clearBackground = false;
+const frameWidth = 1920;
+const frameHeight = 1080;
+const visualize = false; // View the frames as they render
 
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
 
 function setup() {
-  createCanvas(1920, 1080);
+  if (visualize) createCanvas(frameWidth, frameHeight);
+  else createCanvas(30, 12);
   noLoop();
 
   const paint = ({ i, percent, graph }) => {
@@ -29,7 +33,7 @@ function setup() {
       const g = noise(ii / 100 + 1000000000);
       graph.fill(a * 255, b * 255, c * 255);
       graph.stroke(0, f * 100);
-      graph.ellipse(d * width, e * height, 80 * g, 80 * g);
+      graph.ellipse(d * frameWidth, e * frameHeight, 80 * g, 80 * g);
     };
 
     for (let j = 0; j < complexity; j++) {
@@ -37,9 +41,12 @@ function setup() {
       paintOnce(i);
     }
 
-    noStroke();
-    fill(255);
-    rect(0, 0, 30, 12);
+    if (visualize) {
+      image(graph, 0, 0);
+      noStroke();
+      fill(255);
+      rect(0, 0, 30, 12);
+    } else background(255);
     fill(0);
     text(`${percent}%`, 0, 10);
   };
@@ -48,8 +55,8 @@ function setup() {
     { canvasToFrame, ffmpegArgs, handleAll, webgl },
     name
   ) => {
-    const graph = createGraphics(1920, 1080, webgl ? WEBGL : P2D);
-    if (webgl) graph.translate(-width / 2, -height / 2);
+    const graph = createGraphics(frameWidth, frameHeight, webgl ? WEBGL : P2D);
+    if (webgl) graph.translate(-frameWidth / 2, -frameHeight / 2);
 
     clear();
     console.log('Start rendering', name, 'approach');
@@ -69,7 +76,7 @@ function setup() {
       const imagesStream = new PassThrough();
 
       executeFfmpeg({
-        args: ffmpegArgs(graph.width, graph.height),
+        args: ffmpegArgs(frameWidth, frameHeight),
         imagesStream,
         name
       });
