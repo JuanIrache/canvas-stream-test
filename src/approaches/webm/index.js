@@ -24,7 +24,6 @@ class FrameByFrameCanvasRecorder {
 
     ctx.drawImage(source_canvas, 0, 0);
     const stream = (this.stream = canvas.captureStream(0));
-    const track = (this.track = stream.getVideoTracks()[0]);
 
     const rec = (this.recorder = new MediaRecorder(stream, {
       mimeType: 'video/webm;codecs=vp9',
