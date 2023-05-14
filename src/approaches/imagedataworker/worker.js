@@ -32,6 +32,7 @@ const executeFfmpeg = ({ imagesStream, name, w, h }) => {
     ],
     err => {
       if (err) console.error(err);
+      else self.postMessage({ action: 'success' });
     }
   );
 
@@ -49,6 +50,5 @@ onmessage = async ({ data }) => {
   await addFrameToStream({ imagesStream, imageData });
 
   if (last) imagesStream.end();
-
-  self.postMessage({ action: 'success' });
+  else self.postMessage({ action: 'success' });
 };

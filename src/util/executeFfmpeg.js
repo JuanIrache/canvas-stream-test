@@ -1,7 +1,7 @@
 const { execFile } = require('child_process');
 const path = require('path');
 
-module.exports = ({ args, imagesStream, name }) => {
+module.exports = ({ args, imagesStream, name, done }) => {
   const child = execFile(
     path.resolve(__dirname, '../lib/ffmpeg'),
     [
@@ -17,6 +17,7 @@ module.exports = ({ args, imagesStream, name }) => {
     ],
     err => {
       if (err) console.error(err);
+      else if (done) done();
     }
   );
 

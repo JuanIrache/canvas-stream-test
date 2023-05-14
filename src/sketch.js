@@ -74,11 +74,12 @@ function setup() {
       }
     } else {
       const imagesStream = new PassThrough();
-
+      let done = false;
       executeFfmpeg({
         args: ffmpegArgs(frameWidth, frameHeight),
         imagesStream,
-        name
+        name,
+        done: () => (done = true)
       });
 
       const addFrameToStream = frameData =>
@@ -95,6 +96,8 @@ function setup() {
       }
 
       imagesStream.end();
+
+      while (!done) await new Promise(setImmediate);
     }
     const duration = Date.now() - startTime;
     return duration;
