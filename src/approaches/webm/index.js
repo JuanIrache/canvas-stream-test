@@ -69,14 +69,13 @@ class FrameByFrameCanvasRecorder {
   }
 }
 
-let recorder, vid;
+let recorder;
 
 module.exports = {
   handleAll: ({ canvas, first, last, name }) =>
     new Promise(async resolve => {
       if (first) {
         recorder = new FrameByFrameCanvasRecorder(canvas, 25);
-        vid = document.createElement('video');
       }
 
       await recorder.recordFrame();
