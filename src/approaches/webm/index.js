@@ -82,6 +82,7 @@ module.exports = {
       await recorder.recordFrame();
 
       if (last) {
+        await wait(500);
         const blob = await recorder.export();
 
         const buffer = Buffer.from(await blob.arrayBuffer());
