@@ -75,7 +75,7 @@ module.exports = {
   handleAll: ({ canvas, first, last, name }) =>
     new Promise(async resolve => {
       if (first) {
-        recorder = new FrameByFrameCanvasRecorder(canvas, 30);
+        recorder = new FrameByFrameCanvasRecorder(canvas, 25);
         vid = document.createElement('video');
       }
 
