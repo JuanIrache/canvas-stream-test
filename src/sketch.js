@@ -1,6 +1,6 @@
 // Import approaches
 const benchmarkApproach = 'worker';
-const approaches = ['basic', 'imagedata', 'imagedataworker', 'webgl'];
+const approaches = ['webm', 'basic', 'imagedata', 'imagedataworker', 'webgl'];
 
 // Try with more frames or complex images for a solid solution
 
