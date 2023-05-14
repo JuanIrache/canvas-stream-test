@@ -21,5 +21,9 @@ module.exports = ({ args, imagesStream, name, done }) => {
     }
   );
 
-  imagesStream.pipe(child.stdin);
+  // child.stderr.on('data', console.log);
+
+  // child.stdout.on('data', console.log);
+
+  if (imagesStream) imagesStream.pipe(child.stdin);
 };
