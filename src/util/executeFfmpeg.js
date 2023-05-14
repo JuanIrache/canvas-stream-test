@@ -6,8 +6,7 @@ module.exports = ({ args, imagesStream, name, done }) => {
     path.resolve(__dirname, '../lib/ffmpeg'),
     [
       ...args,
-      '-i',
-      '-',
+      ...(imagesStream ? ['-i', '-'] : []),
       '-c:v',
       'libx264',
       '-preset',
