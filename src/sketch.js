@@ -1,6 +1,13 @@
 // Import approaches
 const benchmarkApproach = 'worker';
-const approaches = ['webm', 'basic', 'imagedata', 'imagedataworker', 'webgl'];
+const approaches = [
+  'webm',
+  'webmloop',
+  'basic',
+  'imagedata',
+  'imagedataworker',
+  'webgl'
+];
 
 // Try with more frames or complex images for a solid solution
 
@@ -14,6 +21,8 @@ const visualize = true; // View the frames as they render
 ////////////////////////// Do not edit below this line
 const { PassThrough } = require('stream');
 const executeFfmpeg = require('./util/executeFfmpeg');
+
+let drawable;
 
 function setup() {
   if (visualize) createCanvas(frameWidth, frameHeight);
@@ -52,7 +61,7 @@ function setup() {
   };
 
   const processVideo = async (
-    { canvasToFrame, ffmpegArgs, handleAll, webgl },
+    { canvasToFrame, ffmpegArgs, handleAll, webgl, loopStart, loopEnd },
     name
   ) => {
     const graph = createGraphics(frameWidth, frameHeight, webgl ? WEBGL : P2D);
@@ -62,7 +71,14 @@ function setup() {
     console.log('Start rendering', name, 'approach');
     const startTime = Date.now();
 
-    if (handleAll) {
+    if (loopStart) {
+      const i = 0;
+      paint({ i, percent: Math.round((100 * i) / frames), graph });
+      const { pending } = await loopStart({ canvas: graph.elt });
+      drawable = { i: i + 1, paint, loopEnd, frames, graph, name };
+      loop();
+      await pending;
+    } else if (handleAll) {
       for (let i = 0; i <= frames; i++) {
         paint({ i, percent: Math.round((100 * i) / frames), graph });
         await handleAll({
@@ -140,4 +156,17 @@ function setup() {
   setImmediate(runTest);
 }
 
-function draw() {}
+function draw() {
+  if (drawable) {
+    const { i, paint, loopEnd, frames, graph, name } = drawable;
+    if (i <= frames) {
+      paint({ i, percent: Math.round((100 * i) / frames), graph });
+      const last = i === frames;
+      if (last) {
+        loopEnd({ name });
+        noLoop();
+        drawable = null;
+      } else drawable.i++;
+    }
+  }
+}
