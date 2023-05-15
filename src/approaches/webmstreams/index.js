@@ -48,7 +48,7 @@ class WEBMRecorder {
       };
       if (this.writable) doWrite();
     };
-    rec.start(5000);
+    rec.start(60000);
     waitForEvent(rec, 'start').then(() => resolve({ pending }));
   }
   async export() {
