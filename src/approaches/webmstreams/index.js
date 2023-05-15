@@ -1,4 +1,4 @@
-// Create a browser WEBM and use ffmpeg to adjust the frame rate. Use p5js standard loop to decide frame rate
+// Create a browser WEBM and use ffmpeg to adjust the frame rate. Use p5js standard loop to decide frame rate. Sent to ffmpeg via a stream
 // Inspired by https://stackoverflow.com/questions/58907270/record-at-constant-fps-with-canvascapturemediastream-even-on-slow-computers (but not frame by frame)
 
 const path = require('path');
