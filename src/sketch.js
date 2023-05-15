@@ -3,6 +3,7 @@ const benchmarkApproach = 'worker';
 const approaches = [
   'webm',
   'webmloop',
+  'webmstreams',
   'basic',
   'imagedata',
   'imagedataworker',
@@ -74,7 +75,7 @@ function setup() {
     if (loopStart) {
       const i = 0;
       paint({ i, percent: Math.round((100 * i) / frames), graph });
-      const { pending } = await loopStart({ canvas: graph.elt });
+      const { pending } = await loopStart({ canvas: graph.elt, name });
       drawable = { i: i + 1, paint, loopEnd, frames, graph, name };
       loop();
       await pending;
