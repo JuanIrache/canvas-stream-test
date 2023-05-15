@@ -17,9 +17,7 @@ const waitForEvent = (target, type) =>
 
 class WEBMRecorder {
   constructor(source_canvas, resolve, pending) {
-    this.source = source_canvas;
     const stream = (this.stream = source_canvas.captureStream());
-
     const rec = (this.recorder = new MediaRecorder(stream, {
       mimeType: 'video/webm;codecs=vp9',
       videoBitsPerSecond: 25000000
