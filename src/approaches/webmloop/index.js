@@ -19,7 +19,6 @@ class WEBMRecorder {
   constructor(source_canvas, resolve, pending) {
     this.source = source_canvas;
     const stream = (this.stream = source_canvas.captureStream());
-    this.track = stream.getVideoTracks()[0];
 
     const rec = (this.recorder = new MediaRecorder(stream, {
       mimeType: 'video/webm;codecs=vp9',
