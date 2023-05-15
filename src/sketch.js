@@ -4,6 +4,7 @@ const approaches = [
   'webm',
   'webmloop',
   'webmstreams',
+  'webmworker',
   'basic',
   'imagedata',
   'imagedataworker',

@@ -8,12 +8,10 @@ const pendingBufs = [];
 let writable = true;
 
 const addToStream = ({ imagesStream, arrbuf }) => {
-  pendingBufs.push(arrbuf);
+  pendingBufs.push(Buffer.from(arrbuf));
   const doWrite = async () => {
     if (pendingBufs.length) {
-      const blob = new Blob(pendingBufs);
-      const fullArrbuf = await blob.arrayBuffer();
-      const buf = Buffer.from(fullArrbuf);
+      const buf = Buffer.concat(pendingBufs);
       pendingBufs.length = 0;
       const ok = imagesStream.write(buf, 'utf8', () => {});
       if (!ok) {
@@ -43,7 +41,7 @@ const executeFfmpeg = ({ imagesStream, name }) => {
       '-preset',
       'ultrafast',
       '-y',
-      path.resolve(__dirname, `../../exported/${name}.mp4`)
+      path.resolve(__dirname, `../../../exported/${name}.mp4`)
     ],
     err => {
       if (err) console.error(err);
