@@ -15,7 +15,7 @@ const waitForEvent = (target, type) =>
     })
   );
 
-class FrameByFrameCanvasRecorder {
+class WEBMRecorder {
   constructor(source_canvas, resolve, pending) {
     this.source = source_canvas;
     const stream = (this.stream = source_canvas.captureStream());
@@ -46,7 +46,7 @@ module.exports = {
       const pending = new Promise(function (resolve) {
         onceDone = resolve;
       });
-      recorder = new FrameByFrameCanvasRecorder(canvas, resolve, pending);
+      recorder = new WEBMRecorder(canvas, resolve, pending);
     }),
   loopEnd: async ({ name }) => {
     await wait(500);
