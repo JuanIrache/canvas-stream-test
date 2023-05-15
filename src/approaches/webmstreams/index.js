@@ -33,14 +33,20 @@ class WEBMRecorder {
     const chunks = (this.chunks = []);
     rec.ondataavailable = async evt => {
       chunks.push(evt.data);
-      if (this.writable) {
-        const buf = await chunksToBuf(chunks);
-        const ok = imagesStream.write(buf, 'utf8', () => {});
-        if (!ok) {
-          this.writable = false;
-          imagesStream.once('drain', () => (this.writable = true));
+      const doWrite = async () => {
+        if (chunks.length) {
+          const buf = await chunksToBuf(chunks);
+          const ok = imagesStream.write(buf, 'utf8', () => {});
+          if (!ok) {
+            this.writable = false;
+            imagesStream.once('drain', () => {
+              this.writable = true;
+              doWrite();
+            });
+          }
         }
-      }
+      };
+      if (this.writable) doWrite();
     };
     rec.start(5000);
     waitForEvent(rec, 'start').then(() => resolve({ pending }));
@@ -49,15 +55,8 @@ class WEBMRecorder {
     this.recorder.stop();
     this.stream.getTracks().forEach(track => track.stop());
     await waitForEvent(this.recorder, 'stop');
-    while (this.chunks.length) {
-      if (this.writable) {
-        const buf = await chunksToBuf(this.chunks);
-        this.imagesStream.write(buf, 'utf8', () => {});
-        this.imagesStream.end();
-      } else {
-        await new Promise(setImmediate);
-      }
-    }
+    while (this.chunks.length) await new Promise(setImmediate);
+    this.imagesStream.end();
   }
 }
 
