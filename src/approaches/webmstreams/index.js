@@ -2,8 +2,6 @@
 // Inspired by https://stackoverflow.com/questions/58907270/record-at-constant-fps-with-canvascapturemediastream-even-on-slow-computers (but not frame by frame)
 
 const path = require('path');
-const { writeFile } = require('fs/promises');
-const { unlink } = require('fs');
 const executeFfmpeg = require('../../util/executeFfmpeg');
 
 const wait = ms => new Promise(res => setTimeout(res, ms));
