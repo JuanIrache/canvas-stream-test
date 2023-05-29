@@ -20,7 +20,7 @@ Testing different approaches for sending canvas frames to ffmpeg efficiently wit
 
 ## Conclusions
 
-- Using imageData as opposed to converting the canvas to PNG and using ffmpeg in a worker provide the best results. PNG approaches perform a bit better if the background is reset in every frame (fewer painted pixels are converted to PNG), but still don't match imageData approaches
-- Using webgl and reading the data with readpixels also seems to be efficient, but this might not be viable in some use cases
+- The new webstream approaches work well but memory becomes hard to control, usually resulting in a crash for long projects
+- Using imageData as opposed to converting the canvas to PNG and using ffmpeg in a worker provide the best results for complex images (hard to compress). PNG approaches perform a bit better if the background is reset in every frame (fewer painted pixels are converted to PNG). There, the "worker" approach seems to be faster in most cases
 - Drawing to a hidden canvas (p5.Renderer object) seems to provide a clear advantage in some approaches, not in webgl
-- Real world applications where multiple inputs are overlayed and the program is doing intensive work in addition to the encoding do not seem consistent with these results. There, the "worker" approach seems to be faster in most cases
+- Using webgl and reading the data with readpixels also seems to be efficient, but this might not be viable in some use cases
